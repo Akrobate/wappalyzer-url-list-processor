@@ -43,10 +43,13 @@ class TasksFeeder {
      */
     iterateOverSelectedTasks(task_callback) {
         return this.getIdListFromCrawlerResultFile(this.source_file_filter)
-            .then((filter_id_list) => this.feedQueueWithUrls(
-                this.source_file,
-                filter_id_list,
-                task_callback)
+            .then((include_id_list) => this.getIdListWappalyzerResultFile(this.result_file)
+                .then((exclude_id_list) => this.feedQueueWithUrls(
+                    this.source_file,
+                    include_id_list,
+                    exclude_id_list,
+                    task_callback)
+                )
             );
     }
 
@@ -63,7 +66,7 @@ class TasksFeeder {
                 file,
                 (data) => {
                     if (data.status_code === String(status_code_filter)) {
-                        results.push(data.id);
+                        results.push(Number(data.id));
                     }
                 }
             )
@@ -73,16 +76,37 @@ class TasksFeeder {
     /**
      *
      * @param {*} file
-     * @param {*} include_id_list
-     * @param {*} data_callback
+     * @param {*} status_code_filter
      * @return {Primse}
      */
-    feedQueueWithUrls(file, include_id_list = [], data_callback) {
+    getIdListWappalyzerResultFile(file) {
+        const results = [];
         return this.csv_file
             .readLinePerLineCsvFile(
                 file,
                 (data) => {
-                    if (include_id_list.find((item) => item === data.id) !== undefined) {
+                    results.push(Number(data.id));
+                }
+            )
+            .then(() => results)
+            .catch(() => results);
+    }
+
+    /**
+     *
+     * @param {*} file
+     * @param {Array<Number>} include_id_list
+     * @param {Array<Number>} exclude_id_list
+     * @param {*} data_callback
+     * @return {Primse}
+     */
+    feedQueueWithUrls(file, include_id_list = [], exclude_id_list = [], data_callback) {
+        return this.csv_file
+            .readLinePerLineCsvFile(
+                file,
+                (data) => {
+                    const id = Number(data.id);
+                    if (include_id_list.includes(id) && !exclude_id_list.includes(id)) {
                         data_callback(data);
                     }
                 }
