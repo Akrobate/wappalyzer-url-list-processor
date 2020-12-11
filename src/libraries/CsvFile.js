@@ -61,7 +61,7 @@ class CsvFile {
                 });
             } else {
                 const csv_data = parse(data, CSV_OPTIONS);
-                fs.writeFile(file_path, csv_data, FILE_ENCODING, (error) => {
+                fs.writeFile(file_path, `${csv_data}${CSV_OPTIONS.eol}`, FILE_ENCODING, (error) => {
                     if (error) {
                         return reject(error);
                     }
