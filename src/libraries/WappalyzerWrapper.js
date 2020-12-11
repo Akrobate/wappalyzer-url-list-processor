@@ -75,7 +75,78 @@ class WappalyzerWrapper {
                     wappalyzer = null;
                     return result;
                 })
+            )
+            .catch((error) => {
+                wappalyzer.destroy()
+                    .then(() => {
+                        wappalyzer = null;
+                    });
+                throw error;
+            });
+    }
+
+    /**
+     * @returns {Number}
+     */
+    static getAutoCalculatedTimeoutMillis() {
+
+        const security_coef = 3;
+
+        const {
+            maxWait,
+            maxUrls,
+            delay,
+
+        } = WappalyzerWrapper.OPTIONS;
+
+        return (maxWait + delay) * maxUrls * security_coef;
+    }
+
+    /**
+     * @param {String} url
+     * @returns {Promise}
+     */
+    static initAnalyseDestroyWithTimeout(url) {
+        let wappalyzer = new Wappalyzer(WappalyzerWrapper.OPTIONS);
+        let timeout_handler = null;
+        const timeout_milliseconds = WappalyzerWrapper.getAutoCalculatedTimeoutMillis();
+        // console.log('timeout_milliseconds', timeout_milliseconds);
+        return new Promise((resolve, reject) => {
+
+            timeout_handler = setTimeout(
+                () => wappalyzer.destroy()
+                    .then(() => {
+                        wappalyzer = null;
+                        return reject(
+                            new Error('Wappalyser Wrapper forced to quit because of too long process')
+                        );
+                    }),
+                timeout_milliseconds
             );
+
+            wappalyzer
+                .init()
+                .then(() => wappalyzer.open(url, WappalyzerWrapper.HEADERS))
+                .then((site) => site.analyze())
+                .then((result) => wappalyzer.destroy()
+                    .then(() => {
+                        wappalyzer = null;
+                        return resolve(result);
+                    })
+                )
+                .catch((error) => {
+                    wappalyzer.destroy()
+                        .then(() => {
+                            wappalyzer = null;
+                        });
+                    return reject(error);
+                })
+                .finally(() => {
+                    clearTimeout(timeout_handler);
+                });
+
+        });
+
     }
 
     /**
