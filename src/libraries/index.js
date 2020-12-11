@@ -12,10 +12,14 @@ const {
 const {
     TasksFeeder,
 } = require('./TasksFeeder');
+const {
+    WappalyzerWrapper,
+} = require('./WappalyzerWrapper');
 
 module.exports = {
     AmqpQueue,
     AmqpQueueBuilder,
     CsvFile,
     TasksFeeder,
+    WappalyzerWrapper,
 };
