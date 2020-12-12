@@ -17,7 +17,7 @@ amqp_queue
     .then((results_queue) => {
         // eslint-disable-next-line arrow-body-style
         amqp_queue.consume(results_queue, (data) => {
-            // console.log(data);
+            console.log('Consuming - ' + data.id + ' url ' + data.website_url);
             // eslint-disable-next-line arrow-body-style
             return csv_file_manager.saveJsonToCsvFileResult(
                 configuration.files.result_file,
