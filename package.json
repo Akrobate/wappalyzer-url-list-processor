@@ -15,7 +15,9 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "worker": "node src/refactored-worker-service.js"
+    "worker": "node src/refactored-worker-service.js",
+    "collector": "node src/refactored-results-collector-service.js",
+    "feed": "node src/refactored-task-feeder-service.js"
   },
   "author": "",
   "license": "ISC"
