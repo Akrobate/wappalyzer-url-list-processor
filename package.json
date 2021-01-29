@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "amqplib": "^0.6.0",
+    "bluebird": "^3.7.2",
     "csv-parser": "^2.3.4",
     "eslint": "^7.14.0",
     "json2csv": "^5.0.5",
