@@ -1,8 +1,6 @@
 version: '2'
 
 services:
-  worker:
-    build: ./dockerfiles/
   stats:
     image: bitnami/rabbitmq
     environment:
