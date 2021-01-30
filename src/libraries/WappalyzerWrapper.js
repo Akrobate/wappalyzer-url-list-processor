@@ -13,7 +13,7 @@ class WappalyzerWrapper {
             htmlMaxCols: 2000,
             htmlMaxRows: 2000,
             maxDepth: 3,
-            maxUrls: 10,
+            maxUrls: 20,
             maxWait: 5000,
             probe: true,
             recursive: true,
@@ -127,6 +127,16 @@ class WappalyzerWrapper {
             wappalyzer
                 .init()
                 .then(() => wappalyzer.open(url, WappalyzerWrapper.HEADERS))
+                .then((site) => {
+                    site.on('error', (error) => {
+                        wappalyzer.destroy()
+                            .then(() => {
+                                wappalyzer = null;
+                            });
+                        return reject(error);
+                    });
+                    return site;
+                })
                 .then((site) => site.analyze())
                 .then((result) => wappalyzer.destroy()
                     .then(() => {
