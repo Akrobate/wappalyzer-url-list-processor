@@ -1,5 +1,12 @@
 # wappalyzer-url-list-processor
 
+### Strart infrastructure
+
+This project need rabbitMQ stack to work. A docker-compose file has been provided for this porpose:
+```bash
+docker-compose -f docker-compose-infrastructure.yml up -d
+```
+
 ### Build and run tasks feeder
 
 ```bash
