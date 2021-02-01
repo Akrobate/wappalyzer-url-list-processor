@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  stats:
+    image: bitnami/rabbitmq
+    environment:
+      - RABBITMQ_NODE_TYPE=stats
+      - RABBITMQ_NODE_NAME=rabbit@stats
+      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+      - RABBITMQ_USERNAME=admin
+      - RABBITMQ_PASSWORD=password
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+  queue-disc1:
+    image: bitnami/rabbitmq
+    environment:
+      - RABBITMQ_NODE_TYPE=queue-disc
+      - RABBITMQ_NODE_NAME=rabbit@queue-disc1
+      - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
+      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
+  queue-ram1:
+    image: bitnami/rabbitmq
+    environment:
+      - RABBITMQ_NODE_TYPE=queue-ram
+      - RABBITMQ_NODE_NAME=rabbit@queue-ram1
+      - RABBITMQ_CLUSTER_NODE_NAME=rabbit@stats
+      - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
