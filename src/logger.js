@@ -18,32 +18,32 @@ class Logger {
      * @param {String|Object} message
      * @returns {void}
      */
-    log(message) {
-        console.log(message);
+    log(...message) {
+        console.log(...message);
     }
 
     /**
      * @param {String|Object} message
      * @returns {void}
      */
-    info(message) {
-        console.log(message);
+    info(...message) {
+        console.log(...message);
     }
 
     /**
      * @param {String|Object} message
      * @returns {void}
      */
-    error(message) {
-        console.error(message);
+    error(...message) {
+        console.error(...message);
     }
 
     /**
      * @param {String|Object} message
      * @returns {void}
      */
-    warn(message) {
-        console.warn(message);
+    warn(...message) {
+        console.warn(...message);
     }
 }
 
